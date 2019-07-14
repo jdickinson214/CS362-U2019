@@ -819,7 +819,7 @@ int baronCard(int choice1, int currentPlayer, struct gameState *state){
 
 
 
-void redrawHand(int currentPlayer, int handPos, struct gamestate *state){
+void redrawHand(int currentPlayer, int handPos, struct gameState *state){
 	//discard hand
 	    while(numHandCards(state) > 0)
 	    {
