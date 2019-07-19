@@ -458,7 +458,7 @@ int isGameOver(struct gameState *state)
     return 0;
 }
 
-int scoreFor (int player, struct gameState *state)
+int scoreFor(int player, struct gameState *state)
 {
 
     int i;
@@ -570,7 +570,7 @@ int getWinners(int players[MAX_PLAYERS], struct gameState *state)
         }
         else
         {
-            players[i] = scoreFor (i, state);
+            players[i] = scoreFor(i, state);
         }
     }
 
@@ -755,15 +755,15 @@ int getCost(int cardNumber)
 
 
 void estateCheck(struct gameState *state, int currentPlayer){
-  if (supplyCount(estate, state) > 0)
-	{
-    gainCard(estate, state, 0, currentPlayer);//Gain an estate
-    state->supplyCount[estate]--;//Decrement Estates
-    if (supplyCount(estate, state) == 0)
+    if (supplyCount(estate, state) > 0)
     {
-        isGameOver(state);
+        gainCard(estate, state, 0, currentPlayer);//Gain an estate
+        state->supplyCount[estate]--;//Decrement Estates BUG!!!! GAINCARD ALREADY DOES THIS
+        if (supplyCount(estate, state) == 0)
+        {
+            isGameOver(state);
+        }
     }
-	}
 }
 
 

@@ -41,23 +41,14 @@ int main() {
 
 
 
-	int handCards = 5;
 
 	int numPlayers = 4;
 
-	int startCoins = 0;
 
-	int numAct = 1;
-
-	int numBuy = 1;
-
-
-    int i, j, numCoppers, numEstates;
-    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
+    int i, j;
     int seed = 1000;
 
-    int thisPlayer = 0;
-	int nextPlayer = thisPlayer+1;
+
 	struct gameState G, testG;
 	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
 			sea_hag, tribute, smithy, council_room};
@@ -71,8 +62,7 @@ int main() {
 
 
 	// ----------- TEST 1: choice1 = 1 discard estate card and gain 4 coins--------------
-	printf("TEST: checking card worth and winner calculation \n");
-
+	printf("TEST 1: checking card worth and winner calculation \n");
 
 	//set up players with only coppers
 	for (j = 0; j < numPlayers; j++){
@@ -91,19 +81,112 @@ int main() {
 		}
 	}
 
+
+	for (j = 1; j < numPlayers; j++) {
+		for (i = 0; i < 5; i++){
+			drawCard(j, &G);
+		}
+	}
+
 	for (j = 0; j < numPlayers; j++){
 
 		if (j == 0){
-			G.deck[j][1] = estate; 
+			G.hand[j][0] = estate; 
 		}
 		else if (j == 1){
-			G.deck[j][1] = duchy;
+			G.hand[j][0] = duchy;
 		}
 		else if (j == 2){
-			G.deck[j][1] = providence;
+			G.hand[j][0] = province;
 		}
 		else if (j == 3){
-			G.deck[j][1] = curse;
+			G.hand[j][0] = curse;
+		}
+	}
+
+
+
+
+	// copy the game state to a test case
+	memcpy(&testG, &G, sizeof(struct gameState));
+
+	int players[numPlayers];
+	int score[numPlayers];
+
+	getWinners(players, &testG);
+	int testGwinner = -1;
+	int winner = 0;
+	int tieFlag = 0; // 0 = no tie, 1 = 1 tie, 2 = 2 ties etc
+
+	score[0] = -10;
+	score[1] = -10;
+	score[2] = -10;
+	score[3] = -10;
+	//-10 mean uninitialized
+
+
+	for (i = 0; i < numPlayers; i++){
+		
+		score[i] = scoreFor(i, &testG);
+		
+		if (score[i] > score[winner]){
+			winner = i;
+			tieFlag = 0; //resets since there's a new highscore
+		}
+		
+		if (i != winner && score[i] == score[winner]){
+			tieFlag++;
+			winner = i;
+		}
+
+		if (players[i] == 1){
+			testGwinner = i;
+		}
+	}
+
+
+
+
+	printf("Scores:\n");
+	printf("P1 = %d\n", score[0]);
+	printf("P2 = %d\n", score[1]);
+	printf("P3 = %d\n", score[2]);
+	printf("P4 = %d\n", score[3]);
+
+	printf("Winning Player = %d, expected = %d\n", testGwinner, winner);
+	assertTrue(testGwinner == winner, count, passed);
+
+	printf("# of ties = %d, expected = 0\n", tieFlag);
+	assertTrue(tieFlag == 0, count, passed);
+
+
+
+	printf("Test 1 Results: Passed %d tests out of %d\n\n", *passed, *count);
+
+	countTotal += *count;
+	passedTotal += *passed;
+
+	// ----------- TEST 2: --------------
+	printf("TEST 2: checking if a tie occurs \n");
+	pass = 0;
+	counter = 0;
+
+
+
+
+	for (j = 0; j < numPlayers; j++){
+
+		if (j == 0){
+			G.hand[j][0] = estate; 
+		}
+		else if (j == 1){
+			G.hand[j][0] = estate;
+		}
+		else if (j == 2){
+			G.hand[j][0] = estate;
+		}
+		else if (j == 3){
+			G.hand[j][0] = curse;
 		}
 	}
 
@@ -111,28 +194,62 @@ int main() {
 	// copy the game state to a test case
 	memcpy(&testG, &G, sizeof(struct gameState));
 
-	int players[numPlayers];
+	for (i = 0; i < numPlayers; i++) {
+		players[i] = 0;
+	}
 
-	getWinners(players, testG);
+	getWinners(players, &testG);
+	testGwinner = -1;
+	winner = 0;
+	int winner1 = 0;
+	int winner2 = 0;
+	tieFlag = 0; // 0 = no tie, 1 = 1 tie, 2 = 2 ties etc
 
-	int winner;
-	int tieFlag = 0; // 0 = no tie, 1 = 1 tie, 2 = 2 ties etc
+	score[0] = -10;
+	score[1] = -10;
+	score[2] = -10;
+	score[3] = -10;
+	//-10 mean uninitialized
 
-	for (i = 0; i < numPlayer; i++){
-		if (players[i] == players[winner]){
-			tieFlag++;
+
+	for (i = 0; i < numPlayers; i++){
+		
+		score[i] = scoreFor(i, &testG);
+		
+		if (score[i] > score[winner]){
 			winner = i;
+			tieFlag = 0; //resets since there's a new highscore
 		}
-		if (players[i] > player[winner]){
-			winner = i;
+		
+		if (i != winner && score[i] == score[winner]){
+			tieFlag++;
+			if (winner1 == 0){
+				winner1 = i;
+			}
+			else {
+				winner2 = i;
+			}
+		}
+
+		if (players[i] == 1){
+			testGwinner = i;
 		}
 	}
 
-	printf("Highest Score = %d, expected = 0\n", winner);
-	assertTrue(winner == 2, count, passed);
 
-	printf("# of ties = %d, expected = 0\n", tieFlag);
-	assertTrue(tieFlag == 0, count, passed);
+
+
+	printf("Scores:\n");
+	printf("P1 = %d\n", score[0]);
+	printf("P2 = %d\n", score[1]);
+	printf("P3 = %d\n", score[2]);
+	printf("P4 = %d\n", score[3]);
+
+	printf("Winning Player = %d, expected = %d and %d and %d \n", testGwinner, winner, winner1, winner2);
+	assertTrue(testGwinner == winner, count, passed);
+
+	printf("# of ties calculated in test = %d, expected = 2\n", tieFlag);
+	//no test for this, this is mainly testing the unit test and not for the actual code.
 
 
 	printf("Testing Results: Passed %d tests out of %d\n\n", *passed, *count);

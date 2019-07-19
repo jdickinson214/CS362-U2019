@@ -40,24 +40,14 @@ int main() {
 	int *passed = &pass;
 
 
-
-	int handCards = 5;
-
 	int numPlayers = 4;
 
-	int startCoins = 0;
 
-	int numAct = 1;
+    int i;
 
-	int numBuy = 1;
-
-
-    int i, j, numCoppers, numEstates;
-    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
     int seed = 1000;
 
     int thisPlayer = 0;
-	int nextPlayer = thisPlayer+1;
 	struct gameState G, testG;
 	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
 			sea_hag, tribute, smithy, council_room};
@@ -82,7 +72,7 @@ int main() {
 	// copy the game state to a test case
 	memcpy(&testG, &G, sizeof(struct gameState));
 
-	drawCard(thisPlayer, testG);
+	drawCard(thisPlayer, &testG);
 
 	printf("deckCount = %d, expected = %d\n", testG.deckCount[thisPlayer], G.deckCount[thisPlayer] - 1);
 	assertTrue( testG.deckCount[thisPlayer] == G.deckCount[thisPlayer] - 1, count, passed);
@@ -106,13 +96,13 @@ int main() {
 	counter = 0;
 
 	while (G.deckCount[thisPlayer] > 1){
-		drawCard(thisPlayer, G);
-		discardCard(0, thisPlayer, G, 0); //discards first card in hand
+		drawCard(thisPlayer, &G);
+		discardCard(0, thisPlayer, &G, 0); //discards first card in hand
 	}
 
 	memcpy(&testG, &G, sizeof(struct gameState));
 
-	drawCard(thisPlayer, testG);
+	drawCard(thisPlayer, &testG);
 
 	printf("deckCount = %d, expected = %d\n", testG.deckCount[thisPlayer], G.discardCount[thisPlayer] - 1);
 	assertTrue( testG.deckCount[thisPlayer] == G.discardCount[thisPlayer] - 1, count, passed);

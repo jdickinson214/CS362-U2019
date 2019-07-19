@@ -77,7 +77,7 @@ int main() {
 	testG.hand[thisPlayer][1] = estate;
 	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
 
-	discarded = 2;
+	discarded = 1;
 	newCards = 0;
 	xtraCoins = 4;
 	printf("buy count = %d, expected = %d\n", testG.numBuys, G.numBuys + xtraBuys);
@@ -92,6 +92,9 @@ int main() {
 	printf("coins = %d, expected = %d\n", testG.coins, G.coins + xtraCoins);
 	assertTrue(testG.coins == G.coins + xtraCoins, count, passed);
 
+	printf("discardCount = %d, expected = %d\n", testG.discardCount[thisPlayer], G.discardCount[thisPlayer]+1);
+	assertTrue(testG.discardCount[thisPlayer] == G.discardCount[thisPlayer] +1, count, passed);
+	
 	printf("Test 1 Results: Passed %d tests out of %d\n\n", *passed, *count);
 
 	countTotal += *count;
@@ -110,20 +113,22 @@ int main() {
 	memcpy(&testG, &G, sizeof(struct gameState));
 	choice1 = 1;
 	i = 0;
+
 	//set hand to all coppers, to ensure no estate cards are drawn
 	while (i < testG.handCount[thisPlayer]){
 		testG.hand[thisPlayer][i] = copper;
 		i++;
 	}
+	
 	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
 
 	int numEstates = testG.supplyCount[estate];
-	discarded = 1;
+	discarded = 0;
 	int estateCardGained = 1;
 	xtraCoins = 0;
 
-	printf("buy count = %d, expected = %d\n", testG.numBuys, G.numBuys + xtraBuys);
-	assertTrue(testG.numBuys == G.numBuys + xtraBuys, count, passed);
+	printf("buy count = %d, expected = %d\n", testG.numBuys, G.numBuys + 1);
+	assertTrue(testG.numBuys == G.numBuys +1, count, passed);
 
 	printf("hand count = %d, expected = %d\n", testG.handCount[thisPlayer], G.handCount[thisPlayer] + newCards - discarded);
 	assertTrue(testG.handCount[thisPlayer] == G.handCount[thisPlayer] + newCards - discarded, count, passed);	
@@ -131,8 +136,11 @@ int main() {
 	printf("estate supply count = %d, expected = %d\n", numEstates, G.supplyCount[estate] - estateCardGained);
 	assertTrue(numEstates == G.supplyCount[estate] - estateCardGained, count, passed);
 		
-	printf("coins = %d, expected = %d\n", testG.coins, G.coins + xtraCoins);
-	assertTrue(testG.coins == G.coins + xtraCoins, count, passed);
+	printf("coins = %d, expected = %d\n", testG.coins, G.coins);
+	assertTrue(testG.coins == G.coins, count, passed);
+
+	printf("discardCount = %d, expected = %d\n", testG.discardCount[thisPlayer], G.discardCount[thisPlayer]+1);
+	assertTrue(testG.discardCount[thisPlayer] == G.discardCount[thisPlayer]+1, count, passed);
 
 	printf("Test 2 Results: Passed %d tests out of %d\n\n", *passed, *count);
 
@@ -157,9 +165,10 @@ int main() {
 	cardEffect(baron, choice1, choice2, choice3, &testG, handpos, &bonus);
 
 	numEstates = testG.supplyCount[estate];
-	discarded = 1;
+	discarded = 0;
 	estateCardGained = 1;
 	xtraCoins = 0;
+	xtraBuys = 1;
 
 	printf("buy count = %d, expected = %d\n", testG.numBuys, G.numBuys + xtraBuys);
 	assertTrue(testG.numBuys == G.numBuys + xtraBuys, count, passed);
@@ -172,6 +181,10 @@ int main() {
 		
 	printf("coins = %d, expected = %d\n", testG.coins, G.coins + xtraCoins);
 	assertTrue(testG.coins == G.coins + xtraCoins, count, passed);
+
+	printf("discardCount = %d, expected = %d\n", testG.discardCount[thisPlayer], G.discardCount[thisPlayer]+1);
+	assertTrue(testG.discardCount[thisPlayer] == G.discardCount[thisPlayer]+1, count, passed);
+
 
 	printf("Test 2 Results: Passed %d tests out of %d\n\n", *passed, *count);
 

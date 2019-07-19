@@ -75,7 +75,7 @@ int main() {
 	cardEffect(mine, choice1, choice2, choice3, &testG, handpos, &bonus);
 
 	printf("hand count = %d, expected = %d\n", testG.handCount[thisPlayer], G.handCount[thisPlayer] + newCards - discarded);
-	assertTrue(testG.handCount[thisPlayer] == G.handCount[thisPlayer] + newCards, count, passed);
+	assertTrue(testG.handCount[thisPlayer] == G.handCount[thisPlayer] + newCards - discarded, count, passed);
 
 	printf("discard count = %d, expected = %d\n", testG.discardCount[thisPlayer], G.discardCount[thisPlayer] + discarded);
 	assertTrue(testG.discardCount[thisPlayer] == G.discardCount[thisPlayer] + discarded, count, passed);
@@ -87,7 +87,7 @@ int main() {
 		}
 	}
 
-	printf("silver in hand? expected = yes");
+	printf("silver in hand? expected = yes\n");
 	assertTrue(silverFlag, count, passed);
 		
 	printf("Test Results: Passed %d tests out of %d\n\n", pass, counter);
@@ -113,7 +113,7 @@ int main() {
 	cardEffect(mine, choice1, choice2, choice3, &testG, handpos, &bonus);
 
 	printf("hand count = %d, expected = %d\n", testG.handCount[thisPlayer], G.handCount[thisPlayer] + newCards - discarded);
-	assertTrue(testG.handCount[thisPlayer] == G.handCount[thisPlayer] + newCards, count, passed);
+	assertTrue(testG.handCount[thisPlayer] == G.handCount[thisPlayer] + newCards - discarded, count, passed);
 
 	printf("discard count = %d, expected = %d\n", testG.discardCount[thisPlayer], G.discardCount[thisPlayer] + discarded);
 	assertTrue(testG.discardCount[thisPlayer] == G.discardCount[thisPlayer] + discarded, count, passed);

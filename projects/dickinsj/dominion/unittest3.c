@@ -66,11 +66,11 @@ int main() {
 	// ----------- TEST 1--------------
 	printf("TEST 1: choice1 = Discard 1 card and all other players get that card \n");
 
-	// copy the game state to a test case
-	memcpy(&testG, &G, sizeof(struct gameState));
-
 
 	for (j = 1; j < 5; j++){ //checks each choice in player's hand except first ambassador card
+
+		// copy the game state to a test case
+		memcpy(&testG, &G, sizeof(struct gameState));
 
 		choice1 = j;
 		cardEffect(ambassador, choice1, choice2, choice3, &testG, handpos, &bonus);
@@ -84,15 +84,15 @@ int main() {
 		printf("hand count = %d, expected = %d\n", testG.handCount[thisPlayer], G.handCount[thisPlayer] - discarded);
 		assertTrue(testG.handCount[thisPlayer] == G.handCount[thisPlayer] - discarded, count, passed);
 		
-		for (i = 0; i < testG.numPlayers; i++){
-			
+		for (i = 0; i < testG.numPlayers; i++)
+		{
 			if (i == 0) {
-				printf("Current Player deck count = %d, expected = %d\n", testG.deckCount[thisPlayer], G.deckCount[thisPlayer]);
-				assertTrue(testG.deckCount[thisPlayer] == G.deckCount[thisPlayer], count, passed);
+				printf("Current Player deck count = %d, expected = %d\n", testG.deckCount[i] + testG.handCount[i] + testG.discardCount[i], G.deckCount[i] + G.handCount[i] + G.discardCount[i]);
+				assertTrue( testG.deckCount[i] + testG.handCount[i] + testG.discardCount[i] == G.deckCount[i] + G.handCount[i] + G.discardCount[i], count, passed);
 			}
 			else{
-				printf("Player %d's deck count = %d, expected = %d\n", i, testG.deckCount[i], G.deckCount[i] + newCards);
-				assertTrue(testG.deckCount[i] == G.deckCount[i] + newCards, count, passed);
+				printf("Current Player deck count = %d, expected = %d\n", testG.deckCount[i] + testG.handCount[i] + testG.discardCount[i], G.deckCount[i] + G.handCount[i] + G.discardCount[i] + 1);
+				assertTrue( testG.deckCount[i] + testG.handCount[i] + testG.discardCount[i] == G.deckCount[i] + G.handCount[i] + G.discardCount[i] + 1, count, passed);
 			}
 
 		}
@@ -111,20 +111,25 @@ int main() {
 		
 	counter = 0;
 	pass = 0;
-	G.hand[thisPlayer][4] = copper; //need two copper for it to work properly
+
+	G.hand[thisPlayer][0] = ambassador;
+	G.hand[thisPlayer][1] = copper;
+	G.hand[thisPlayer][2] = duchy;
+	G.hand[thisPlayer][3] = estate;
+	G.hand[thisPlayer][4] = copper;
 
 
 	choice1 = 1; //will discard copper
 	printf("Chose copper card in position 1 for discard, must choose another copper card\n");
-	for (j = 0; j < testG.handCount[thisPlayer]; j++){
+	for (j = 2; j < 5; j++){
 		memcpy(&testG, &G, sizeof(struct gameState)); //reset gamestate
-		choice2 = j; //will iterate through all choices to see if game errors out.
-		if (testG.hand[thisPlayer][j] == copper){
-			printf("Choosing hand position = %d, expected function return = %d\n", j, -1);
+		choice2 = j; 
+		if (j > 2){
+			printf("Choice2 = %d, expected function return = %d\n", j, -1);
 			assertTrue(cardEffect(ambassador, choice1, choice2, choice3, &testG, handpos, &bonus) == -1, count, passed);
 		}
-		else{
-			printf("Choosing hand position = %d, expected function return = %d\n", j, 1);
+		else {
+			printf("Choice2 = %d, expected function return = %d\n", j, 1);
 			assertTrue(cardEffect(ambassador, choice1, choice2, choice3, &testG, handpos, &bonus) == 1, count, passed);
 		}
 	}
@@ -143,17 +148,19 @@ int main() {
 	printf("hand count = %d, expected = %d\n", testG.handCount[thisPlayer], G.handCount[thisPlayer] - discarded);
 	assertTrue(testG.handCount[thisPlayer] == G.handCount[thisPlayer] - discarded, count, passed);
 	
-	for (i = 0; i < testG.numPlayers; i++){
-		
+	for (i = 0; i < testG.numPlayers; i++)
+	{
 		if (i == 0) {
-			printf("Current Player deck count = %d, expected = %d\n", testG.deckCount[thisPlayer], G.deckCount[thisPlayer]);
-			assertTrue(testG.deckCount[thisPlayer] == G.deckCount[thisPlayer], count, passed);
+			printf("Current Player deck count = %d, expected = %d\n", testG.deckCount[i] + testG.handCount[i] + testG.discardCount[i], G.deckCount[i] + G.handCount[i] + G.discardCount[i]);
+			assertTrue( testG.deckCount[i] + testG.handCount[i] + testG.discardCount[i] == G.deckCount[i] + G.handCount[i] + G.discardCount[i], count, passed);
 		}
 		else{
-			printf("Player %d's deck count = %d, expected = %d\n", i, testG.deckCount[i], G.deckCount[i] + newCards);
-			assertTrue(testG.deckCount[i] == G.deckCount[i] + newCards, count, passed);
+			printf("Current Player deck count = %d, expected = %d\n", testG.deckCount[i] + testG.handCount[i] + testG.discardCount[i], G.deckCount[i] + G.handCount[i] + G.discardCount[i] + 1);
+			assertTrue( testG.deckCount[i] + testG.handCount[i] + testG.discardCount[i] == G.deckCount[i] + G.handCount[i] + G.discardCount[i] + 1, count, passed);
 		}
+
 	}
+
 
 	printf("Test 2 Results: Passed %d tests out of %d\n\n", pass, counter);
 

@@ -38,14 +38,11 @@ int main() {
 	int *count = &counter;
 	int *passed = &pass;
 
-	int handCards = 5;
-
 
 	int numPlayers = 2;
 
 
-    int i, j, numCoppers, numEstates;
-    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
+    int i, j;
     int seed = 1000;
 
     int thisPlayer = 0;
@@ -77,7 +74,7 @@ int main() {
 	
 
 	//perform shuffle
-	shuffle(thisPlayer, testG);
+	shuffle(thisPlayer, &testG);
 
 
 	//first check if count is the same
@@ -87,11 +84,6 @@ int main() {
 
 	if (deckCount == testG.deckCount[thisPlayer]){	//will not perform if deckCount fails.
 
-		int afterDeck[deckCount];
-
-		for (i = 0; i < deckCount; i++){
-			afterDeck[j] = testG.deck[thisPlayer][i];
-		}
 
 		int matching = 0;
 		int inOrder = 0;

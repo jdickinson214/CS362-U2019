@@ -68,10 +68,8 @@ int main() {
 
 
     int i, j, numCoppers, numEstates;
-    int handpos = 0, choice1 = 0, choice2 = 0, choice3 = 0, bonus = 0;
     int seed = 1000;
 
-    int thisPlayer = 0;
 	struct gameState G, testG;
 	int k[10] = {adventurer, embargo, village, minion, mine, cutpurse,
 			sea_hag, tribute, smithy, council_room};
@@ -115,7 +113,7 @@ int main() {
 		numCoppers = 60-(7*numPlayers);
 		
 		printf("copper cards = %d, expected = %d\n", testG.supplyCount[copper], numCoppers);
-		assertTrue(testG.supplyCount[province] == curseCount(numPlayers), count, passed);
+		assertTrue(testG.supplyCount[province] == numCoppers, count, passed);
 	
 		numCoppers = 0;
 		numEstates = 0;
@@ -142,7 +140,7 @@ int main() {
 				}
 			}
 		}
-
+	}
 
 
 	printf("Test 1 Results: Passed %d tests out of %d\n\n", *passed, *count);

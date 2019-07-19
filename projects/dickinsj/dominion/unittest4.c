@@ -75,27 +75,33 @@ int main() {
 	// ----------- TEST 1--------------
 	printf("TEST: iterate through possible combinations of top two cards in nextPlayer's pile \n");
 
+	printf("0 = action card, 1 = treasure card, 2 = victory card");
 
 
 	// copy the game state to a test case
 	for (i = 0; i < 3; i++){
 		for (j = 0; j < 3; j++){
+
+			xtraAct = 0;
+			xtraCoins = 0;
+			newCards = 0;
+
 			if (i == 0){
 				xtraAct = 2;
 			}
-			if (i == 1) {
+			else if (i == 1) {
 				xtraCoins = 2;
 			}
-			if (i == 2) {
+			else{
 				newCards = 2;
 			}
 			if (j == 0 && i != 0){
 				xtraAct = 2;
 			}
-			if (j == 1 && i != 1) {
+			else if (j == 1 && i != 1) {
 				xtraCoins = 2;
 			}
-			if (j == 2 && i != 2) {
+			else if (j == 2 && i != 2) {
 				newCards = 2;
 			}
 
@@ -104,6 +110,8 @@ int main() {
 			testG.deck[nextPlayer][testG.deckCount[nextPlayer]-2] = cardTypeIterator(j);
 
 			cardEffect(tribute, choice1, choice2, choice3, &testG, handpos, &bonus);
+
+			printf("\n first card = %d, second card = %d\n", i, j);
 
 			printf("hand count = %d, expected = %d\n", testG.handCount[thisPlayer], G.handCount[thisPlayer] + newCards);
 			assertTrue(testG.handCount[thisPlayer] == G.handCount[thisPlayer] + newCards, count, passed);
