@@ -95,17 +95,21 @@ int main() {
 	pass = 0;
 	counter = 0;
 
-	while (G.deckCount[thisPlayer] > 1){
-		drawCard(thisPlayer, &G);
-		discardCard(0, thisPlayer, &G, 0); //discards first card in hand
+
+
+	while (G.deckCount[thisPlayer] >= 1){
+		G.discard[thisPlayer][G.discardCount[thisPlayer]] = G.deck[thisPlayer][G.deckCount[thisPlayer]-1];
+		G.deckCount[thisPlayer]--;
+		G.discardCount[thisPlayer]++;
 	}
+
 
 	memcpy(&testG, &G, sizeof(struct gameState));
 
 	drawCard(thisPlayer, &testG);
 
-	printf("deckCount = %d, expected = %d\n", testG.deckCount[thisPlayer], G.discardCount[thisPlayer] - 1);
-	assertTrue( testG.deckCount[thisPlayer] == G.discardCount[thisPlayer] - 1, count, passed);
+	printf("deckCount = %d, expected = %d\n", testG.deckCount[thisPlayer], G.discardCount[thisPlayer]-1);
+	assertTrue( testG.deckCount[thisPlayer] == G.discardCount[thisPlayer]-1, count, passed);
 
 
 	printf("handCount = %d, expected = %d\n", testG.handCount[thisPlayer], G.handCount[thisPlayer] + 1);

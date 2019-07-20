@@ -113,12 +113,14 @@ int main() {
 		numCoppers = 60-(7*numPlayers);
 		
 		printf("copper cards = %d, expected = %d\n", testG.supplyCount[copper], numCoppers);
-		assertTrue(testG.supplyCount[province] == numCoppers, count, passed);
+		assertTrue(testG.supplyCount[copper] == numCoppers, count, passed);
 	
-		numCoppers = 0;
-		numEstates = 0;
 
 		for (i = 0; i < numPlayers; i++){
+			numCoppers = 0;
+			numEstates = 0;
+
+
 			for (j = 0; j < 10; j++){
 				if (testG.deck[i][j] == copper){
 					numCoppers++;
@@ -135,7 +137,7 @@ int main() {
 					printf("Player %d's estates = %d, expected = 3\n", i, numEstates);
 					assertTrue(numEstates == 3, count, passed);
 
-					printf("Player %d's coppers = %d, expected = 7\n", i, numEstates);
+					printf("Player %d's coppers = %d, expected = 7\n", i, numCoppers);
 					assertTrue(numCoppers == 7, count, passed);
 				}
 			}
@@ -169,7 +171,7 @@ int main() {
 	assertTrue(testG.whoseTurn == player1, count, passed);
 
 	printf("# of cards in hand = %d, expected = %d\n", testG.handCount[0], handCards);
-	assertTrue(testG.numPlayers == handCards, count, passed);
+	assertTrue(testG.handCount[0] == handCards, count, passed);
 
 	printf("# of actions = %d, expected = %d\n", testG.numActions, numAct);
 	assertTrue(testG.numActions == numAct, count, passed);

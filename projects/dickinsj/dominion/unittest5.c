@@ -136,7 +136,7 @@ int main() {
 /*		
 
 
-NOTE: this test crashes due to a seg fault. commenting out now so that the branch and coverage data can be added to unittestresults.out file neatly.
+NOTE: this test crashes due to a seg fault. commenting out now so that the branch and coverage data can be added to unittestresults.out file.
 
 
 

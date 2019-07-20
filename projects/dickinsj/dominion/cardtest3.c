@@ -39,18 +39,18 @@ int main() {
 	int *count = &counter;
 	int *passed = &pass;
 
-
+	int i = 0;
 
 	int handCount = 5;
 
 	int numPlayers = 4;
 
-	int startCoins = 0;
+	int xtraCoins = 0;
 
 	int numAct = 1;
 
 	int numBuy = 1;
-	
+
     int seed = 1000;
 
     int thisPlayer = 0;
@@ -67,7 +67,7 @@ int main() {
 
 
 
-	// ----------- TEST 1: choice1 = 1 discard estate card and gain 4 coins--------------
+	// ----------- TEST 1:--------------
 	printf("TEST: checking whose turn, their hand count, coins, actions, buys\n");
 
 	// copy the game state to a test case
@@ -86,20 +86,30 @@ int main() {
 			nextPlayer = 0;
 		}
 
-		printf("Current Player's Turn = %d, expected = %d\n", testG.whoseTurn, nextPlayer);
+		xtraCoins = 0;
+
+		for (i = 0; i < testG.handCount[nextPlayer]; i++){
+			if (testG.hand[nextPlayer][i] == copper){
+				xtraCoins++;
+			}
+		}
+
+		printf("Player %d's Turn = %d, expected = %d\n", nextPlayer, testG.whoseTurn, nextPlayer);
 		assertTrue(testG.whoseTurn == nextPlayer, count, passed);
 
-		printf("Current Player's HandCount = %d, expected = %d\n", testG.handCount[testG.whoseTurn], handCount);
+		printf("Player %d's HandCount = %d, expected = %d\n", nextPlayer, testG.handCount[testG.whoseTurn], handCount);
 		assertTrue(testG.handCount[testG.whoseTurn] == handCount, count, passed);
 
-		printf("Current Player's coins = %d, expected = %d\n", testG.coins, startCoins);
-		assertTrue(testG.coins == startCoins, count, passed);
+		printf("Player %d's coins = %d, expected = %d\n", nextPlayer, testG.coins, xtraCoins);
+		assertTrue(testG.coins == xtraCoins, count, passed);
 
 		printf("# of actions = %d, expected = %d\n", testG.numActions, numAct);
 		assertTrue(testG.numActions == numAct, count, passed);
 
 		printf("# of buys = %d, expected = %d\n", testG.numBuys, numBuy);
 		assertTrue(testG.numBuys == numBuy, count, passed);
+
+		endTurn(&G);
 
 	}
 
