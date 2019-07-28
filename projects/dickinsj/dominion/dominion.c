@@ -7,7 +7,6 @@
 
 
 
-
 int compare(const void *a, const void *b)
 {
     if (*(int *)a > *(int *)b)
@@ -822,15 +821,15 @@ int baronCard(int choice1, int currentPlayer, struct gameState *state){
 
 void redrawHand(int currentPlayer, int handPos, struct gameState *state){
 	//discard hand
-	    while(numHandCards(state) > 0)
+	    while(state->handCount[currentPlayer] > 0) //fixed other bug, handCount looks at this player, previous function looked at only whoseTurn it was.
 	    {
-	        discardCard(handPos, currentPlayer, state, 0);
+            discardCard(handPos, currentPlayer, state, 0);
 	    }
 
 	    //draw 4
-	    for (int p = 0; p <= 4; p++)
+	    for (int p = 0; p <= 4; p++) //should be p < 4 not p <= 4
 	    {
-	        drawCard(currentPlayer, state);
+            drawCard(currentPlayer, state);
 	    }
 }
 
@@ -843,14 +842,15 @@ int minionCard(int i, int j, int choice1, int choice2, int currentPlayer, struct
 	//discard card from hand
 	discardCard(handPos, currentPlayer, state, 0);
 
+
+
 	if (choice1)    //+2 coins
 	{
 	    state->coins = state->coins + 2;
 	}
-	else if (choice2)   //discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
+	else if (choice2) //discard hand, redraw 4, other players with 5+ cards discard hand and draw 4
 	{
-		redrawHand(currentPlayer, handPos, state);
-
+        redrawHand(currentPlayer, 1, state);
 	    //other players discard hand and redraw if hand size > 4
 	    for (i = 0; i < state->numPlayers; i++)
 	    {
@@ -858,7 +858,7 @@ int minionCard(int i, int j, int choice1, int choice2, int currentPlayer, struct
 	        {
 	            if (state->handCount[i] > 4 )
 	            {
-	                redrawHand(i, handPos, state);
+	                redrawHand(i, 0, state);
 	            }
 	        }
 	    }
