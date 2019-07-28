@@ -755,14 +755,14 @@ int getCost(int cardNumber)
 
 
 void estateCheck(struct gameState *state, int currentPlayer){
-  if (supplyCount(estate, state) > 0)
-	{
-    gainCard(estate, state, 0, currentPlayer);//Gain an estate
-    state->supplyCount[estate]--;//Decrement Estates
-    if (supplyCount(estate, state) == 0)
+    if (supplyCount(estate, state) > 0)
     {
-        isGameOver(state);
-    }
+        gainCard(estate, state, 0, currentPlayer);//Gain an estate
+//        state->supplyCount[estate]--;//Decrement Estates BUG!!!!
+        if (supplyCount(estate, state) == 0)
+        {
+            isGameOver(state);
+        }
 	}
 }
 
@@ -781,14 +781,14 @@ int baronCard(int choice1, int currentPlayer, struct gameState *state){
 	        if (state->hand[currentPlayer][p] == estate) //Found an estate card!
 	        {
 	            state->coins += 4;//Add 4 coins to the amount of coins
-
-	            state->discardCount[currentPlayer]++; //bug, should be after next statement
+                state->discardCount[currentPlayer]++; //bug, should be after next statement
 	            state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
 
 	            for (; p < state->handCount[currentPlayer]; p++)
 	            {
 	                state->hand[currentPlayer][p] = state->hand[currentPlayer][p + 1];
 	            }
+
 	            state->hand[currentPlayer][state->handCount[currentPlayer]] = -1;
 	            state->handCount[currentPlayer]--;
 	            card_not_discarded = 0;//Exit the loop
@@ -812,14 +812,15 @@ int baronCard(int choice1, int currentPlayer, struct gameState *state){
 	else
 	{
 		estateCheck(state, currentPlayer);
-	}
+	};
+
 	return 0;
 }
 
 
 
 
-void redrawHand(int currentPlayer, int handPos, struct gamestate *state){
+void redrawHand(int currentPlayer, int handPos, struct gameState *state){
 	//discard hand
 	    while(numHandCards(state) > 0)
 	    {
