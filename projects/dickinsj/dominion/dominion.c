@@ -963,8 +963,7 @@ int tributeCard(int i, int tributeRevealedCards[], int currentPlayer, int nextPl
 	{
 	    if (state->deckCount[nextPlayer] == 0)
 	    {
-	        shuffle(nextPlayer, state); //Shuffle the deck	  	BUG: should shuffle after for loop      
-
+	   
 	        for (i = 0; i < state->discardCount[nextPlayer]; i++)
 	        {
 	            state->deck[nextPlayer][i] = state->discard[nextPlayer][i];//Move to deck
@@ -972,20 +971,21 @@ int tributeCard(int i, int tributeRevealedCards[], int currentPlayer, int nextPl
 	            state->discard[nextPlayer][i] = -1;
 	            state->discardCount[nextPlayer]--;
 	        }
-	
+	     shuffle(nextPlayer, state); //Shuffle the deck        BUG: should shuffle after for loop      
+
 	    }
 	    tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
-	    state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
+	    state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;  //BUG -- decrements it, and next line does the same
 	    state->deckCount[nextPlayer]--;
 	    tributeRevealedCards[1] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
-	    state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;
+	    state->deck[nextPlayer][state->deckCount[nextPlayer]--] = -1;  //BUG same as above, discards 4 cards instead of 2
 	    state->deckCount[nextPlayer]--;
 	}
 	
 	if (tributeRevealedCards[0] == tributeRevealedCards[1]) //If we have a duplicate card, just drop one
 	{
-	    //state->playedCards[state->playedCardCount] = tributeRevealedCards[1];	//BUG shoudln't be commented out
-	    //state->playedCardCount++;		//bug: shouldn't be commented out
+	    state->playedCards[state->playedCardCount] = tributeRevealedCards[1];	//BUG shoudln't be commented out
+	    state->playedCardCount++;		//bug: shouldn't be commented out
 	    tributeRevealedCards[1] = -1;
 	}
 	

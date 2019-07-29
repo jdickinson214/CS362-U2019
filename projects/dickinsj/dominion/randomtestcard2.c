@@ -18,11 +18,11 @@ void assertTrue(int expression, int *pass, int *count) {
   if (expression == 1) {
     (*count)++;
     (*pass)++;
-    printf("PASSED\n");
+//    printf("PASSED\n");
   }
   else{
     (*count)++;
-    printf("******FAILED******\n");
+//    printf("******FAILED******\n");
   }
 }
 
@@ -36,21 +36,20 @@ void assertCrash(int expression, int *crash){
 
 
 int checkMinion(int choice1, int choice2, int p, struct gameState *post, int handPos, int *passPtr, int *countPtr, int *crash) {
-  //+1 buy, can discard an estate card for +4 gold, or gain an estate card.
+ 
 
   struct gameState pre;
   memcpy (&pre, post, sizeof(struct gameState));
 
   int r, i, j;
-  printf ("minion PRE : choice1 %d choice2 %d p %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d handPos %3d\n",
-  choice1, choice2, p, pre.numPlayers, pre.handCount[p], pre.deckCount[p], pre.discardCount[p], pre.numActions, pre.coins, handPos);
+//  printf ("minion PRE : choice1 %d choice2 %d p %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d handPos %3d\n",
+//  choice1, choice2, p, pre.numPlayers, pre.handCount[p], pre.deckCount[p], pre.discardCount[p], pre.numActions, pre.coins, handPos);
     
   r = minionCard(i, j, choice1, choice2, p, post, handPos);
 
-  printf ("minion POST: choice1 %d choice2 %d p %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d handPos %3d ",
-  choice1, choice2, p, post->numPlayers, post->handCount[p], post->deckCount[p], post->discardCount[p], post->numActions, post->coins, handPos);
+//  printf ("minion POST: choice1 %d choice2 %d p %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d handPos %3d ",
+//  choice1, choice2, p, post->numPlayers, post->handCount[p], post->deckCount[p], post->discardCount[p], post->numActions, post->coins, handPos);
 
-  int foundEstateFlag = 0;
 
   discardCard(handPos, p, &pre, 0);
 

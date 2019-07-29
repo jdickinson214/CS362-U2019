@@ -18,14 +18,14 @@ void assertTrue(int expression, int *pass, int *count) {
   if (expression == 1) {
     (*count)++;
     (*pass)++;
-    printf("PASSED\n");
+//    printf("PASSED\n");
   }
   else{
     (*count)++;
-    printf("******FAILED******\n");
+//    printf("******FAILED******\n");
   }
 }
-
+ 
 
 void assertCrash(int expression, int *crash){
   if (expression != 1) {
@@ -35,54 +35,82 @@ void assertCrash(int expression, int *crash){
 }
 
 
-int checkMinion(int choice1, int choice2, int p, struct gameState *post, int handPos, int *passPtr, int *countPtr, int *crash) {
-  //+1 buy, can discard an estate card for +4 gold, or gain an estate card.
+int checkTribute(int tributeRevealedCards[], int p, int np, struct gameState *post, int handPos, int *passPtr, int *countPtr, int *crash) {
+ 
 
   struct gameState pre;
   memcpy (&pre, post, sizeof(struct gameState));
 
   int r, i, j;
-  printf ("tribute PRE : choice1 %d choice2 %d p %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d handPos %3d\n",
-  choice1, choice2, p, pre.numPlayers, pre.handCount[p], pre.deckCount[p], pre.discardCount[p], pre.numActions, pre.coins, handPos);
+//  printf ("tribute PRE : p %d np %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d buy %3d handPos %3d\n",
+//  p, np, pre.numPlayers, pre.handCount[np], pre.deckCount[np], pre.discardCount[np], pre.numActions, pre.coins, pre.numBuys, handPos);
     
-  r = tributeCard(i, j, choice1, choice2, p, post, handPos);
+  r = tributeCard(i, tributeRevealedCards, p, np, post, handPos);
 
-  printf ("tribute POST: choice1 %d choice2 %d p %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d handPos %3d ",
-  choice1, choice2, p, post->numPlayers, post->handCount[p], post->deckCount[p], post->discardCount[p], post->numActions, post->coins, handPos);
+//  printf ("tribute POST: p %d np %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d buy %3d handPos %3d\n",
+//  p, np, post->numPlayers, post->handCount[np], post->deckCount[np], post->discardCount[np], post->numActions, post->coins, post->numBuys, handPos);
 
-  int foundEstateFlag = 0;
 
-  discardCard(handPos, p, &pre, 0);
+  if (pre.discardCount[np] + pre.deckCount[np] <= 1){
 
-  if (choice1 > 0) {
-    pre.coins += 2;
+    if (pre.deckCount[np] == 1){
+      tributeRevealedCards[0] = pre.deck[np][pre.deckCount[np] - 1];
+      pre.deckCount[np]--;
+    }
+    else if (pre.discardCount[np] == 1){
+      tributeRevealedCards[0] = pre.discard[np][pre.discardCount[np] - 1];
+      pre.discardCount[np]--;
+    }
+    else {
+      printf("no cards\n");
+    }
   }
-  else if (choice2 > 0) {
-    int cards = pre.handCount[p];     //get handCount as a set value
-    for (j = 0; j < cards; j++){      
-      discardCard(0, p, &pre, 0);     //discard whole hand
-
-    }
-    for (j = 0; j < 4; j++){
-      drawCard(p, &pre);              //redraw 4 new cards
-    }
-
-    for (i = 0; i < pre.numPlayers; i++){
-      if (pre.handCount[i] > 4 && i != p){//if player has more than 4 cards, or it's the current player
-        int cards = pre.handCount[i];     //get handCount as a set value
-        for (j = 0; j < cards; j++){      
-          discardCard(0, i, &pre, 0);     //discard whole hand
-  
-        }
-        for (j = 0; j < 4; j++){
-          drawCard(i, &pre);              //redraw 4 new cards
-        }
+  else {
+    if (pre.deckCount[np] == 0){
+      for (i = 0; i < pre.discardCount[np]; i++){
+        pre.deck[np][i] = pre.discard[np][i];
+        pre.deckCount[np]++;
+        pre.discard[np][i] = -1;
+        pre.discardCount[np]--;
       }
+      shuffle(np, &pre);
     }
+    tributeRevealedCards[0] = pre.deck[np][pre.deckCount[np] - 1];
+    pre.deck[np][pre.deckCount[np] - 1] = -1;
+    pre.deckCount[np]--;
+    tributeRevealedCards[1] = pre.deck[np][pre.deckCount[np] - 1];
+    pre.deck[np][pre.deckCount[np] - 1] = -1;
+    pre.deckCount[np]--;
+  }
+      
+  if (tributeRevealedCards[0] == tributeRevealedCards[1]) 
+  {
+      pre.playedCards[pre.playedCardCount] = tributeRevealedCards[1]; 
+      pre.playedCardCount++;
+      tributeRevealedCards[1] = -1;
+  }
+  
+  for (i = 0; i < 2; i++)
+  {
+      if (tributeRevealedCards[i] == copper || tributeRevealedCards[i] == silver || tributeRevealedCards[i] == gold) //Treasure cards
+      {
+          pre.coins += 2;
+      }
+      else if (tributeRevealedCards[i] == estate || tributeRevealedCards[i] == duchy || tributeRevealedCards[i] == province || tributeRevealedCards[i] == gardens || tributeRevealedCards[i] == great_hall) //Victory Card Found
+      {
+          drawCard(p, &pre);
+          drawCard(p, &pre);
+      }
+      else //Action Card
+      {
+          pre.numActions += 2;
+      }
   }
 
   
-  pre.numActions++;
+//  printf ("tribute PRE : p %d np %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d buy %3d handPos %3d\n",
+//  p, np, pre.numPlayers, pre.handCount[np], pre.deckCount[np], pre.discardCount[np], pre.numActions, pre.coins, pre.numBuys, handPos);
+ 
 
   assertCrash((r == 0), crash);
 
@@ -113,7 +141,7 @@ int main () {
 
   struct gameState G;
 
-  printf ("Testing Minion.\n");
+  printf ("Testing Tribute.\n");
 
   printf ("RANDOM TESTS.\n");
 
@@ -125,20 +153,25 @@ int main () {
       ((char*)&G)[i] = floor(Random() * 256);
     }
 
-    choice1 = floor(Random() * 2);  
-    if (choice1 == 0){
-      choice2 = 1;
-    }
-    else{
-      choice2 = 0;
-    }
     
-
     G.numPlayers = floor(Random() * 3) + 2; //can only be 2-4 players
     p = floor(Random() * G.numPlayers);
+    int np; //next player
+    if (p == G.numPlayers - 1){
+      np = 0;
+    }
+    else {
+      np = p+1;
+    }
+
+    int tributeRevealedCards[2] = {-1, -1};
+
+
     G.coins = floor(Random() * 100);
     G.numActions = floor(Random() * 100);
+    G.numBuys = floor(Random() * 100);
     G.playedCardCount = floor(Random() * MAX_HAND); 
+
 
 
     for (int k = 0; k < G.numPlayers; k++){
@@ -155,7 +188,7 @@ int main () {
 
       for (i = 0; i < G.handCount[k]; i++){
         if (i == handPos && k == p){
-          G.hand[p][handPos] = %d;
+          G.hand[p][handPos] = tribute;
         } else{
           int x = floor(Random() * 27);
           G.hand[k][i] = randomCard[x];
@@ -172,7 +205,7 @@ int main () {
     }
 
 
-    checkMinion(choice1, choice2, p, &G, handPos, passPtr, countPtr, &crash);
+    checkTribute(tributeRevealedCards, p, np, &G, handPos, passPtr, countPtr, &crash);
 
   }
 
@@ -180,8 +213,8 @@ int main () {
 
 
   printf("\n >>>>> SUCCESS: Testing complete <<<<<");
-  printf("\n >>>>> %dCard passed %d out of %d <<<<<\n", pass, count);
-  printf(" >>>>> %dCard crashed %d out of %d <<<<<\n\n", crash, count);
+  printf("\n >>>>> tributeCard passed %d out of %d <<<<<\n", pass, count);
+  printf(" >>>>> tributeCard crashed %d out of %d <<<<<\n\n", crash, count);
 
   exit(0);
 
