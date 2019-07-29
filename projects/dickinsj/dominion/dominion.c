@@ -963,15 +963,15 @@ int tributeCard(int i, int tributeRevealedCards[], int currentPlayer, int nextPl
 	{
 	    if (state->deckCount[nextPlayer] == 0)
 	    {
-	   
-	        for (i = 0; i < state->discardCount[nextPlayer]; i++)
+	                for (i = 0; i < state->discardCount[nextPlayer]; i++)
 	        {
 	            state->deck[nextPlayer][i] = state->discard[nextPlayer][i];//Move to deck
 	            state->deckCount[nextPlayer]++;
 	            state->discard[nextPlayer][i] = -1;
 	            state->discardCount[nextPlayer]--;
 	        }
-	     shuffle(nextPlayer, state); //Shuffle the deck        BUG: should shuffle after for loop      
+            shuffle(nextPlayer, state); //Shuffle the deck        BUG: should shuffle after for loop
+    
 
 	    }
 	    tributeRevealedCards[0] = state->deck[nextPlayer][state->deckCount[nextPlayer] - 1];
