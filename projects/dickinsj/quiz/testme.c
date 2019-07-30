@@ -2,17 +2,33 @@
 #include<string.h>
 #include<stdlib.h>
 #include<time.h>
+#include<math.h>
 
 char inputChar()
 {
-    // TODO: rewrite this function
-    return ' ';
+    
+    char x = ((rand() % 94) + 32); //32-125
+
+    return x;
 }
 
 char *inputString()
 {
-    // TODO: rewrite this function
-    return "";
+    int length = ((rand() % 10) + 1); //1-10
+    char *str;
+    str = (char *) malloc(sizeof(char));
+
+    for (int i = 0; i < length-1; i++){
+      int coin = rand() % 2; //0 or 1
+      if (coin){
+        str[i] = 101;
+      } else {
+        str[i] = ((rand() % 3) + 114); //114-116 r, s, t
+      }
+    }
+    str[length-1] = '\0';
+
+    return str;
 }
 
 void testme()
