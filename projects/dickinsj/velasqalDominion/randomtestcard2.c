@@ -18,18 +18,18 @@ void assertTrue(int expression, int *pass, int *count) {
   if (expression == 1) {
     (*count)++;
     (*pass)++;
-//    printf("PASSED\n");
+    printf("PASSED\n");
   }
   else{
     (*count)++;
-//    printf("******FAILED******\n");
+    printf("******FAILED******\n");
   }
 }
 
 
 void assertCrash(int expression, int *crash){
   if (expression != 1) {
-//    printf("----------Crashed------------");
+    printf("----------Crashed------------");
     (*crash)++;
   }
 }
@@ -42,13 +42,13 @@ int checkMinion(int choice1, int choice2, int p, struct gameState *post, int han
   memcpy (&pre, post, sizeof(struct gameState));
 
   int r, i, j;
-//  printf ("minion PRE : choice1 %d choice2 %d p %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d handPos %3d\n",
-//  choice1, choice2, p, pre.numPlayers, pre.handCount[p], pre.deckCount[p], pre.discardCount[p], pre.numActions, pre.coins, handPos);
+  printf ("minion PRE : choice1 %d choice2 %d p %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d handPos %3d\n",
+  choice1, choice2, p, pre.numPlayers, pre.handCount[p], pre.deckCount[p], pre.discardCount[p], pre.numActions, pre.coins, handPos);
     
-  r = minionCard(i, j, choice1, choice2, p, post, handPos);
+  r = executeMinion(choice1, choice2, handPos, post, p);
 
-//  printf ("minion POST: choice1 %d choice2 %d p %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d handPos %3d ",
-//  choice1, choice2, p, post->numPlayers, post->handCount[p], post->deckCount[p], post->discardCount[p], post->numActions, post->coins, handPos);
+  printf ("minion POST: choice1 %d choice2 %d p %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d handPos %3d ",
+  choice1, choice2, p, post->numPlayers, post->handCount[p], post->deckCount[p], post->discardCount[p], post->numActions, post->coins, handPos);
 
 
   discardCard(handPos, p, &pre, 0);
@@ -83,7 +83,10 @@ int checkMinion(int choice1, int choice2, int p, struct gameState *post, int han
   
   pre.numActions++;
 
-  assertCrash((r == 0), crash);
+  //assertCrash((r == 0), crash);
+  printf ("\nminion PRE : choice1 %d choice2 %d p %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d handPos %3d\n",
+  choice1, choice2, p, pre.numPlayers, pre.handCount[p], pre.deckCount[p], pre.discardCount[p], pre.numActions, pre.coins, handPos);
+
 
   assertTrue((memcmp(&pre, post, sizeof(struct gameState)) == 0), passPtr, countPtr);
   return 0;
@@ -136,6 +139,7 @@ int main () {
     G.numPlayers = floor(Random() * 3) + 2; //can only be 2-4 players
     p = floor(Random() * G.numPlayers);
     G.coins = floor(Random() * 100);
+    G.whoseTurn = p;
     G.numActions = floor(Random() * 100);
     G.playedCardCount = floor(Random() * MAX_HAND); 
 

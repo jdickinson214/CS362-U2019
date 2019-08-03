@@ -309,7 +309,7 @@ int buyCard(int supplyPos, struct gameState *state) {
 }
 
 int numHandCards(struct gameState *state) {
-  return state->handCount[ whoseTurn(state) ];
+  return state->handCount[whoseTurn(state)];
 }
 
 int handCard(int handPos, struct gameState *state) {
@@ -650,7 +650,7 @@ void executeBaron(int choice1, struct gameState *state, int currentPlayer){
         int card_not_discarded = 1;//Flag for discard set!
         while(card_not_discarded){
             if (state->hand[currentPlayer][p] == estate){//Found an estate card!
-                state->coins += 2;//Add 4 coins to the amount of coins
+                state->coins += 2;//Add 4 coins to the amount of coins   BUG, should be 4
                 state->discard[currentPlayer][state->discardCount[currentPlayer]] = state->hand[currentPlayer][p];
                 state->discardCount[currentPlayer]++;
                 for (;p < state->handCount[currentPlayer]; p++){
@@ -715,7 +715,7 @@ void executeMinion(int choice1, int choice2, int handPos, struct gameState *stat
                 if ( state->handCount[i] > 4 ){
                     //discard hand
                     while( state->handCount[i] > 0 ){
-                        discardCard(handPos, i, state, 0);
+                        discardCard(0, i, state, 0);
                     }
                                 
                     //draw 4

@@ -18,18 +18,18 @@ void assertTrue(int expression, int *pass, int *count) {
   if (expression == 1) {
     (*count)++;
     (*pass)++;
-//    printf("PASSED\n");
+    printf("PASSED\n");
   }
   else{
     (*count)++;
-//    printf("******FAILED******\n");
+    printf("******FAILED******\n");
   }
 }
  
 
 void assertCrash(int expression, int *crash){
   if (expression != 1) {
-//    printf("----------Crashed------------");
+    printf("----------Crashed------------");
     (*crash)++;
   }
 }
@@ -42,13 +42,13 @@ int checkTribute(int tributeRevealedCards[], int p, int np, struct gameState *po
   memcpy (&pre, post, sizeof(struct gameState));
 
   int r, i, j;
-//  printf ("tribute PRE : p %d np %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d buy %3d handPos %3d\n",
-//  p, np, pre.numPlayers, pre.handCount[np], pre.deckCount[np], pre.discardCount[np], pre.numActions, pre.coins, pre.numBuys, handPos);
+  printf ("tribute PRE : p %d np %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d buy %3d handPos %3d\n",
+  p, np, pre.numPlayers, pre.handCount[np], pre.deckCount[np], pre.discardCount[np], pre.numActions, pre.coins, pre.numBuys, handPos);
     
-  r = tributeCard(i, tributeRevealedCards, p, np, post, handPos);
+  r = executeTribute(p, np, post);
 
-//  printf ("tribute POST: p %d np %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d buy %3d handPos %3d\n",
-//  p, np, post->numPlayers, post->handCount[np], post->deckCount[np], post->discardCount[np], post->numActions, post->coins, post->numBuys, handPos);
+  printf ("tribute POST: p %d np %d totalP %d HC %3d DeC %3d DiC %3d act %3d $$ %3d buy %3d handPos %3d\n",
+  p, np, post->numPlayers, post->handCount[np], post->deckCount[np], post->discardCount[np], post->numActions, post->coins, post->numBuys, handPos);
 
 
   if (pre.discardCount[np] + pre.deckCount[np] <= 1){

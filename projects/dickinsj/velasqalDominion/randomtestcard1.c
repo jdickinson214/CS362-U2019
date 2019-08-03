@@ -18,18 +18,18 @@ void assertTrue(int expression, int *pass, int *count) {
   if (expression == 1) {
     (*count)++;
     (*pass)++;
-//    printf("PASSED\n");
+    printf("PASSED\n");
   }
   else{
     (*count)++;
-//    printf("**********FAILED***********\n");
+    printf("**********FAILED***********\n");
   }
 }
 
 
 void assertCrash(int expression, int *crash){
   if (expression != 1) {
-//    printf("----------Crashed------------");
+    printf("----------Crashed------------");
     (*crash)++;
   }
 }
@@ -42,13 +42,13 @@ int checkBaron(int choice1, int p, struct gameState *post, int *passPtr, int *co
   memcpy (&pre, post, sizeof(struct gameState));
 
   int r;
-//  printf ("baron PRE: choice1 %d p %d HC %d DeC %d DiC %d Buy %d $$ %d EstateSupply %d\n",
-//  choice1, p, pre.handCount[p], pre.deckCount[p], pre.discardCount[p], pre.numBuys, pre.coins, supplyCount(estate, &pre));
+  printf ("baron PRE: choice1 %d p %d HC %d DeC %d DiC %d Buy %d $$ %d EstateSupply %d\n",
+  choice1, p, pre.handCount[p], pre.deckCount[p], pre.discardCount[p], pre.numBuys, pre.coins, supplyCount(estate, &pre));
     
-  r = baronCard(choice1, p, post);
+  r = executeBaron(choice1, post, p);
 
-//  printf ("baron POST: choice1 %d p %d HC %d DeC %d DiC %d Buy %d $$ %d EstateSupply %d\n",
-//  choice1, p, post->handCount[p], post->deckCount[p], post->discardCount[p], post->numBuys, post->coins,  supplyCount(estate, post));
+  printf ("baron POST: choice1 %d p %d HC %d DeC %d DiC %d Buy %d $$ %d EstateSupply %d\n",
+  choice1, p, post->handCount[p], post->deckCount[p], post->discardCount[p], post->numBuys, post->coins,  supplyCount(estate, post));
 
   int foundEstateFlag = 0;
 
@@ -150,8 +150,8 @@ int main () {
 
 
   printf("\n >>>>> SUCCESS: Testing complete <<<<<");
-  printf("\n >>>>> baronCard passed %d out of %d <<<<<\n", pass, count);
-  printf(" >>>>> baronCard crashed %d out of %d <<<<<\n\n", crash, count);
+  printf("\n >>>>> executeBaron passed %d out of %d <<<<<\n", pass, count);
+  printf(" >>>>> executeBaron crashed %d out of %d <<<<<\n\n", crash, count);
 
   exit(0);
 
